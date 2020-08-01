@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { Image, KeyboardAvoidingView, Platform, View, ScrollView }  from 'react-native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
+
 import Logoimg from '../../assets/logo.png';
 import { Feather } from '@expo/vector-icons';
 
@@ -12,7 +15,13 @@ import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccountButt
 
 
 const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const handlerSignIn = useCallback((data:object) => {
+    console.log(data);
+  }, []);
+
   return (
     <>
       <KeyboardAvoidingView style={{ flex:1 }} behavior={Platform.OS == 'ios' ? 'padding' : undefined} enabled>
@@ -22,12 +31,14 @@ const SignIn: React.FC = () => {
                 <View>
                 <Title>Faça seu logon</Title>
                 </View>
+              <Form ref={formRef} onSubmit={handlerSignIn}>
               <Input name="email" icon="mail" placeholder="E-mail" />
               <Input name="password" icon="lock" placeholder="Senha" />
 
               <Button onPress={() => {
-                console.log('ok')
+                formRef.current?.submitForm();
               }}>Entrar</Button>
+              </Form>
               <ForgotPassword onPress={() => { }}>
                 <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
               </ForgotPassword>
