@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import { Image, KeyboardAvoidingView, Platform, View, ScrollView }  from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, View, ScrollView, TextInput }  from 'react-native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
@@ -16,6 +16,7 @@ import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccountButt
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
   const handlerSignIn = useCallback((data:object) => {
@@ -32,8 +33,27 @@ const SignIn: React.FC = () => {
                 <Title>Faça seu logon</Title>
                 </View>
               <Form ref={formRef} onSubmit={handlerSignIn}>
-              <Input name="email" icon="mail" placeholder="E-mail" />
-              <Input name="password" icon="lock" placeholder="Senha" />
+              <Input name="email"
+              icon="mail"
+              placeholder="E-mail"
+              autoCorrect={false}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                passwordInputRef.current?.focus();
+              }}
+              />
+
+              <Input name="password"
+              ref={passwordInputRef}
+              icon="lock"
+              placeholder="Senha"
+              returnKeyType="send"
+              onSubmitEditing={() => {
+                formRef.current?.submitForm();
+              }}
+              />
 
               <Button onPress={() => {
                 formRef.current?.submitForm();
