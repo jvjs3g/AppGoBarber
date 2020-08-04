@@ -4,10 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Image, KeyboardAvoidingView, Platform, View, ScrollView, TextInput, Alert }  from 'react-native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup  from 'yup';
+
 import getValidationErros from '../../utils/getValidationErros';
-
-import * as Yup from 'yup'; 
-
 import Logoimg from '../../assets/logo.png';
 import { Feather } from '@expo/vector-icons';
 
@@ -15,7 +14,6 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccountButton, CreateAccountButtonText } from './styles'; 
-
 
 interface SignInFormData {
   email: string;
@@ -38,8 +36,7 @@ const SignIn: React.FC = () => {
       await schema.validate(data, {
         abortEarly:false,
       });
-      
-
+     
     }catch(err){
 
       if(err instanceof Yup.ValidationError) {
@@ -49,14 +46,14 @@ const SignIn: React.FC = () => {
 
         return;
       }
-
       Alert.alert(
         'Erro na autenticação',
         'Ocorreu um erro ao fazer login, cheque as credenciais.',
-
       );
+    
     }
   }, []);
+
 
   return (
     <>
@@ -67,7 +64,7 @@ const SignIn: React.FC = () => {
                 <View>
                 <Title>Faça seu logon</Title>
                 </View>
-              <Form ref={formRef} onSubmit={handlerSignIn}>
+              <Form ref={formRef} onSubmit={handlerSignIn}> 
               <Input name="email"
               icon="mail"
               placeholder="E-mail"
@@ -84,6 +81,7 @@ const SignIn: React.FC = () => {
               ref={passwordInputRef}
               icon="lock"
               placeholder="Senha"
+              secureTextEntry
               returnKeyType="send"
               onSubmitEditing={() => {
                 formRef.current?.submitForm();
