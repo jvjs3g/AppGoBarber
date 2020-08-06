@@ -15,6 +15,7 @@ interface SignInCredentials {
 
 interface AuthContextDate {
   user: object;
+  loading: boolean;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
 }
@@ -24,7 +25,7 @@ export const AuthContext = createContext<AuthContextDate>({} as AuthContextDate)
 export const AuthProvider: React.FC = ({ children }) => {
 
   const [data, setData] = useState<AuthState>({ } as AuthState);
-
+  const [loading, setLoading] = useState(true);
 
   
 useEffect(() => {
@@ -37,6 +38,8 @@ useEffect(() => {
     if(token[1] && user[1]){
       setData({ token: token[1], user: JSON.parse(user[1])});
     }
+
+    setLoading(false);
 
   }
 
@@ -55,7 +58,7 @@ useEffect(() => {
 
     await AsyncStorage.multiSet([
       ['@GoBarber:token', token],
-      ['@GoBarber:user', JSON.stringify(user)]
+      ['@GoBarber:user', JSON.stringify(user)],
     ]);
 
     setData({ token, user });
@@ -64,8 +67,8 @@ useEffect(() => {
   const signOut = useCallback( async () => {
 
     await AsyncStorage.multiRemove([
-      '@GoBarber:token',
-      '@GoBarber:user'
+      '@GoBarber:user',
+      '@GoBarber:token'
     ]);
 
     setData({} as AuthState);
@@ -73,7 +76,7 @@ useEffect(() => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
+    <AuthContext.Provider value={{ user: data.user, loading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

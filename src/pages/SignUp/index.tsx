@@ -26,6 +26,7 @@ interface SignUpFormData {
 const SignUp: React.FC = () => {
 
   const FormRef = useRef<FormHandles>(null);
+  const navigation = useNavigation();
 
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
@@ -64,9 +65,8 @@ const SignUp: React.FC = () => {
         'Ocorreu um erro ao fazer cadastro, tente novamente.',
        );
     }
-  }, []); 
+  }, [navigation]); 
 
-  const navigation = useNavigation();
   return (
     <>
       <KeyboardAvoidingView style={{ flex:1 }} behavior={Platform.OS == 'ios' ? 'padding' : undefined} enabled>
