@@ -6,6 +6,8 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import * as Yup  from 'yup';
 
+import { useAuth } from '../../hooks/Auth';
+
 import getValidationErros from '../../utils/getValidationErros';
 import Logoimg from '../../assets/logo.png';
 import { Feather } from '@expo/vector-icons';
@@ -25,6 +27,9 @@ const SignIn: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
+  const { signIn } = useAuth();
+
+
   const  handlerSignIn = useCallback( async (data: SignInFormData ) => {
     try{
       formRef.current?.setErrors({});
@@ -36,7 +41,11 @@ const SignIn: React.FC = () => {
       await schema.validate(data, {
         abortEarly:false,
       });
-     
+
+      await signIn({
+        email: data.email,
+        password: data.password,
+      });
     }catch(err){
 
       if(err instanceof Yup.ValidationError) {
@@ -52,9 +61,9 @@ const SignIn: React.FC = () => {
       );
     
     }
-  }, []);
+  }, [signIn]);
 
-
+ 
   return (
     <>
       <KeyboardAvoidingView style={{ flex:1 }} behavior={Platform.OS == 'ios' ? 'padding' : undefined} enabled>
@@ -101,7 +110,7 @@ const SignIn: React.FC = () => {
       <CreateAccountButton onPress={() =>  {navigation.navigate('SignUp')}} >
         <Feather name="log-in" size={20} color="#ff9000"/>
         <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
-      </CreateAccountButton>
+      </CreateAccountButton>  
     </>
   );
 };
