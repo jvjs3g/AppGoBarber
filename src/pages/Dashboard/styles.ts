@@ -26,12 +26,12 @@ export const UserName = styled.Text`
   font-family: sans-serif;
 `;
 
-export const UserAvatar = styled.TouchableOpacity`
-  
-`;
-
-export const ProfileButton = styled.Image`
+export const UserAvatar = styled.Image`
   width: 56px;
   height: 56px;
   border-radius:28px;
+`;
+
+export const ProfileButton = styled.TouchableOpacity`
+ 
 `;
