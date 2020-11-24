@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 
 import { useAuth } from '../../hooks/Auth';
 import api from '../../services/api';
 
-import { Container, Header, HeaderTitle, UserName, UserAvatar, ProfileButton, ProvidersList } from './styles';
+import { Container, Header, HeaderTitle, UserName, UserAvatar, ProfileButton, ProvidersList, ProvidersListTitle, ProviderContainer,ProviderAvatar,ProviderInfo, ProviderName, ProviderMeta, ProviderMetaText } from './styles';
 
 
 export interface Providers {
@@ -31,6 +32,10 @@ const Dashboard: React.FC = () => {
     signOut();
   }, [signOut]);
 
+  const navigateToCreatedAppointment = useCallback((provider_id:string) => {
+    navigate('CreateAppointment',{ provider_id});
+  }, [navigate]);
+
   return (
     <Container>
       <Header>
@@ -48,10 +53,30 @@ const Dashboard: React.FC = () => {
       <ProvidersList
       data={providers}
       keyExtractor={provider => provider.id}
-      renderItem={({item }) => (
-        <UserName>
-            {item.name}
-          </UserName>
+      ListHeaderComponent={
+        <ProvidersListTitle>
+          Cabeleireiros
+        </ProvidersListTitle>
+      }
+      renderItem={({item: provider }) => (
+       <ProviderContainer onPress={() => {navigateToCreatedAppointment(provider.id)}}>
+         <ProviderAvatar source={{uri: provider.avatar_url}}/>
+         <ProviderInfo>
+          <ProviderName>{provider.name}</ProviderName>
+          
+          <ProviderMeta>
+            <Icon name="calendar" size={14} color="#ff9000" />
+            <ProviderMetaText>Segunda á sexta</ProviderMetaText>
+          </ProviderMeta>
+
+          <ProviderMeta>
+            <Icon name="clock" size={14} color="#ff9000" />
+            <ProviderMetaText>8h ás 18h</ProviderMetaText>
+          </ProviderMeta>
+
+
+         </ProviderInfo>
+       </ProviderContainer>
       )}
       />
     </Container>
