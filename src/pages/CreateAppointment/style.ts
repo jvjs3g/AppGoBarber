@@ -3,6 +3,10 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import styled from 'styled-components/native';
 import { Providers } from '../Dashboard';
 
+interface ProviderContainerProps {
+  selected: boolean;
+}
+
 
 export const Container = styled.View`
   flex:1;

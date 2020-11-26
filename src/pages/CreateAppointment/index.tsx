@@ -23,6 +23,8 @@ const CreateAppointment: React.FC = () => {
   const { providerId } = route.params as RouteParams;
 
   const [providers,setProviders] = useState<Providers[]>([]);
+  
+  const [selectedProvider,setSelectedProvider] = useState(providerId);
 
   useEffect(() => {
     api.get('providers').then(response => {
@@ -55,7 +57,7 @@ const CreateAppointment: React.FC = () => {
         data={providers}
         keyExtractor={(provider) => provider.id}
         renderItem={({ item: provider }) => (
-         <ProviderContainer>
+         <ProviderContainer selected={provider.id == selectedProvider}>
            <ProviderAvatar source={{ uri: provider.avatar_url}}/>
            <ProviderName>{provider.name}</ProviderName>
          </ProviderContainer>
